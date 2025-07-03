@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Vietnamese documentation (local development only)
+SOURCE_CODE_GUIDE_VI.md

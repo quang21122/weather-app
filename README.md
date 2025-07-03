@@ -1,27 +1,32 @@
 # Weather App
 
-A modern, responsive weather application built with React, TypeScript, and Tailwind CSS.
+A modern, responsive weather application built with React, TypeScript, and Tailwind CSS. Get real-time weather information, forecasts, and explore weather conditions for cities worldwide with an intuitive and beautiful interface.
 
 ## Features
 
-- 🌤️ Current weather conditions
-- 📅 7-day weather forecast
-- 🔍 City search functionality
-- 🌍 Popular cities quick access
-- 📱 Responsive design (desktop & mobile)
-- 🎨 Clean, modern UI with Ant Design components
-- ⚡ Fast data fetching with TanStack Query
-- 🔄 Real-time weather updates
+- 🌤️ **Current Weather Conditions** - Real-time weather data with detailed metrics
+- 📅 **7-Day Weather Forecast** - Extended forecasts using OpenWeatherMap One Call API
+- 🔍 **Smart City Search** - Autocomplete search with debounced API calls
+- 🌍 **Popular Cities** - Quick access to major cities with virtualized scrolling
+- 📍 **Geolocation Support** - Automatic location detection with user permission
+- 📱 **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- 🎨 **Modern UI** - Clean interface with Ant Design components and glass morphism effects
+- ⚡ **Fast Performance** - Optimized with TanStack Query caching and code splitting
+- 🔄 **Real-time Updates** - Automatic data refresh and error recovery
+- 🛡️ **Error Handling** - Comprehensive error boundaries and user-friendly messages
 
 ## Technology Stack
 
 - **Frontend Framework**: React 19 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **UI Components**: Ant Design
-- **State Management**: TanStack Query (React Query)
-- **Package Manager**: pnpm
-- **Weather API**: OpenWeatherMap API
+- **Build Tool**: Vite with optimized build configuration
+- **Styling**: Tailwind CSS with custom design system
+- **UI Components**: Ant Design (antd)
+- **State Management**: TanStack Query (React Query) for server state
+- **HTTP Client**: Axios with custom interceptors
+- **Icons**: Lucide React for modern iconography
+- **Virtualization**: React Window for performance optimization
+- **Package Manager**: pnpm for fast, efficient dependency management
+- **Weather API**: OpenWeatherMap API (Current Weather, One Call 3.0, Geocoding)
 
 ## Getting Started
 
@@ -82,71 +87,88 @@ pnpm preview
 
 ## Project Structure
 
-```
+```text
 src/
 ├── components/          # React components
-│   ├── layout/         # Layout components
-│   ├── ui/             # Reusable UI components
-│   └── weather/        # Weather-specific components
+│   ├── layout/         # Layout components (AppLayout, Header)
+│   ├── ui/             # Reusable UI components (SearchBar, ErrorBoundary)
+│   └── weather/        # Weather-specific components (WeatherCard, ForecastCard, PopularCities)
+├── hooks/              # Custom React hooks (useWeather, useGeolocation)
 ├── lib/                # External service integrations
-│   └── api/           # API service functions
+│   ├── api/           # API service functions (weather.ts)
+│   └── query/         # TanStack Query configuration
 ├── types/              # TypeScript type definitions
-├── utils/              # Utility functions
-├── constants/          # App constants and configuration
+├── utils/              # Utility functions (weather helpers)
+├── constants/          # App constants and configuration (cities.ts)
 └── assets/            # Static assets
 ```
 
 ## API Integration
 
-This app uses the OpenWeatherMap API for weather data:
+This app integrates with multiple OpenWeatherMap API endpoints for comprehensive weather data:
 
-- **Current Weather**: Real-time weather conditions for any location
-- **5-Day Forecast**: Weather predictions with 3-hour intervals
-- **Geocoding**: Location search and coordinate resolution
-- **Reverse Geocoding**: Get location names from coordinates
+- **Current Weather API**: Real-time weather conditions for any location
+- **One Call API 3.0**: Enhanced 7-day forecasts with detailed daily data (falls back to 5-day forecast)
+- **5-Day Forecast API**: Weather predictions with 3-hour intervals (fallback option)
+- **Geocoding API**: Location search and coordinate resolution with autocomplete
+- **Reverse Geocoding**: Get location names from coordinates for geolocation features
 
 ### API Key Setup
 
 1. Sign up for a free account at [OpenWeatherMap](https://openweathermap.org/api)
 2. Generate an API key from your dashboard
 3. Add the API key to your `.env` file:
+
    ```env
    VITE_OPENWEATHER_API_KEY=your_actual_api_key_here
    ```
+
+**Note**: The app automatically tries to use One Call API 3.0 for enhanced forecasts and gracefully falls back to the standard 5-day forecast if the premium API is not available.
 
 ## Features in Detail
 
 ### 🌤️ Current Weather Display
 
 - Real-time temperature and weather conditions
-- "Feels like" temperature
+- "Feels like" temperature with heat index
 - Humidity, wind speed, and atmospheric pressure
-- Visibility and UV index
+- Visibility and UV index (when available)
 - Sunrise and sunset times
 - Weather icons from OpenWeatherMap
+- Location-based weather with coordinates display
 
 ### 📅 7-Day Weather Forecast
 
-- Daily weather predictions
-- High and low temperatures
-- Weather conditions and icons
-- Precipitation probability
-- Wind speed information
-- Summary statistics
+- Enhanced daily weather predictions using One Call API 3.0
+- High and low temperatures with detailed ranges
+- Weather conditions with descriptive icons
+- Precipitation probability and amounts
+- Wind speed and direction information
+- Fallback to 5-day forecast when premium API unavailable
 
 ### 🔍 Smart Location Search
 
-- Autocomplete city search
-- Support for city, state, and country
-- Debounced search to reduce API calls
-- Error handling for invalid locations
+- Real-time autocomplete city search with debouncing
+- Support for city, state, and country combinations
+- Intelligent search suggestions with location details
+- Error handling for invalid or unavailable locations
+- Search results limited to prevent API overuse
 
 ### 🌍 Popular Cities
 
 - Quick access to major cities worldwide
-- Real-time weather for each city
-- One-click weather viewing
-- Responsive city grid
+- Real-time weather display for each city
+- Virtualized scrolling for optimal performance
+- One-click weather viewing with smooth transitions
+- Responsive grid layout adapting to screen size
+
+### 📍 Geolocation Support
+
+- Automatic location detection on app startup
+- User permission-based location access
+- Fallback handling for denied permissions
+- Manual location refresh capability
+- Error handling for unsupported browsers
 
 ### 📱 Responsive Design
 
@@ -165,11 +187,13 @@ This app uses the OpenWeatherMap API for weather data:
 
 ## Performance Optimizations
 
-- **Code Splitting**: Automatic chunk splitting for faster loading
-- **Caching**: TanStack Query for intelligent data caching
-- **Debouncing**: Search input debouncing to reduce API calls
-- **Lazy Loading**: Components loaded on demand
-- **Bundle Optimization**: Optimized build with tree shaking
+- **Code Splitting**: Automatic chunk splitting with vendor, antd, and query bundles
+- **Intelligent Caching**: TanStack Query with configurable stale times (5-10 minutes)
+- **Debounced Search**: 300ms debouncing on search input to minimize API calls
+- **Virtualization**: React Window for popular cities list to handle large datasets
+- **Bundle Optimization**: Tree shaking, minification, and optimized asset loading
+- **Lazy Loading**: Components and routes loaded on demand
+- **API Optimization**: Efficient endpoint selection and fallback strategies
 
 ## Browser Support
 
@@ -228,20 +252,20 @@ This app uses the OpenWeatherMap API for weather data:
 
 ### Code Structure
 
-```
+```text
 src/
 ├── components/          # React components
-│   ├── layout/         # Layout components (AppLayout)
-│   ├── ui/             # Reusable UI components (SearchBar, ErrorBoundary)
-│   └── weather/        # Weather-specific components
-├── hooks/              # Custom React hooks
+│   ├── layout/         # Layout components (AppLayout, Header)
+│   ├── ui/             # Reusable UI components (SearchBar, ErrorBoundary, LoadingSkeleton)
+│   └── weather/        # Weather-specific components (WeatherCard, ForecastCard, PopularCities)
+├── hooks/              # Custom React hooks (useWeather, useGeolocation)
 ├── lib/                # External service integrations
-│   ├── api/           # API service functions
-│   └── query/         # TanStack Query configuration
-├── types/              # TypeScript type definitions
-├── utils/              # Utility functions
-├── constants/          # App constants and configuration
-└── assets/            # Static assets
+│   ├── api/           # API service functions (weather.ts with comprehensive endpoints)
+│   └── query/         # TanStack Query configuration and query keys
+├── types/              # TypeScript type definitions (weather.ts with comprehensive types)
+├── utils/              # Utility functions (weather helpers, formatters)
+├── constants/          # App constants and configuration (cities.ts with popular cities)
+└── assets/            # Static assets (icons, images)
 ```
 
 ## Contributing
